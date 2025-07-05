@@ -1,0 +1,57 @@
+﻿@model PortfolioApp.Models.PortfolioProject
+
+<h2>Dodaj nowy projekt</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Tytuł:</label>
+        <input asp-for="Title" />
+    </div>
+
+    <div>
+        <label>Krótki opis:</label>
+        <input asp-for="ShortDescription" />
+    </div>
+
+    <div>
+        <label>Pełny opis (HTML lub markdown):</label>
+        <textarea asp-for="Content" rows="5"></textarea>
+    </div>
+
+    <div>
+        <label>Opis (zwykły):</label>
+        <textarea asp-for="Description"></textarea>
+    </div>
+
+    <div>
+        <label>Kategoria:</label>
+        <input asp-for="Category" />
+    </div>
+
+    <div>
+        <label>Tagi (np. C#, Vue, design):</label>
+        <input asp-for="Tags" />
+    </div>
+
+    <div>
+        <label>Slug (np. moj-super-projekt):</label>
+        <input asp-for="Slug" />
+    </div>
+
+    <div>
+        <label>Adres URL obrazka:</label>
+        <input asp-for="ImageUrl" />
+    </div>
+
+    <div>
+        <label>Video embed (iframe):</label>
+        <textarea asp-for="VideoEmbedCode"></textarea>
+    </div>
+
+    <div>
+        <label>Link do projektu (GitHub, demo):</label>
+        <input asp-for="ProjectLink" />
+    </div>
+
+    <button type="submit">Dodaj</button>
+</form>

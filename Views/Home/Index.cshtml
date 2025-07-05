@@ -12,12 +12,37 @@
         @foreach (var project in Model)
         {
             <li>
-                <h3>@project.Title</h3>
-                <p>@project.Description</p>
+                <h3>
+                    <a asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
+                </h3>
+               
+                <p><strong>@project.Category</strong> | Dodano: @project.CreatedAt.ToShortDateString()</p>
+                <p>@project.ShortDescription</p>
+
+                @if (!string.IsNullOrEmpty(project.VideoEmbedCode))
+                {
+                    @Html.Raw(project.VideoEmbedCode)
+                }
+                else if (!string.IsNullOrEmpty(project.ImageUrl))
+                {
+                   
+                   
+
+            
+                   
+                    <a asp-controller="Portfolio" asp-action="DetailsBySlug" asp-route-slug="@project.Slug">
+                        <img src="@project.ImageUrl" alt="Obraz projektu" style="max-width: 300px;" />
+                    </a>
+
+
+
+ 
+                }
+
+                <p><strong>Tagi:</strong> @project.Tags</p>
                 <p>
                     <a href="@project.ProjectLink" target="_blank">Zobacz projekt</a>
                 </p>
-                <img src="@project.ImageUrl" alt="Obraz projektu" style="max-width: 300px;" />
                 <hr />
             </li>
         }

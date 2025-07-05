@@ -1,0 +1,26 @@
+﻿namespace PortfolioApp.Views.Account
+{
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<h2>Logowanie administratora</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>Login:</label>
+        <input type="text" name="username" />
+    </div>
+    <div>
+        <label>Hasło:</label>
+        <input type="password" name="password" />
+    </div>
+    <button type="submit">Zaloguj</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <p style="color:red;">@Html.ValidationMessage("")</p>
+}
+
+}
