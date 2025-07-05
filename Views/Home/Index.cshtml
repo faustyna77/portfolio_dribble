@@ -1,0 +1,29 @@
+﻿@model List<PortfolioApp.Models.PortfolioProject>
+
+@{
+    ViewData["Title"] = "Projekty";
+}
+
+<h1>Moje projekty</h1>
+
+@if (Model != null && Model.Count > 0)
+{
+    <ul>
+        @foreach (var project in Model)
+        {
+            <li>
+                <h3>@project.Title</h3>
+                <p>@project.Description</p>
+                <p>
+                    <a href="@project.ProjectLink" target="_blank">Zobacz projekt</a>
+                </p>
+                <img src="@project.ImageUrl" alt="Obraz projektu" style="max-width: 300px;" />
+                <hr />
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak projektów do wyświetlenia.</p>
+}

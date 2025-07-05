@@ -35,6 +35,66 @@ ScaffoldingReadMe.txt
 *.nupkg
 # NuGet Symbol Packages
 *.snupkg
+# === ASP.NET Core / .NET ===
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.pdb
+*.log
+*.nupkg
+*.snupkg
+
+# === Visual Studio ===
+.vs/
+.vscode/
+*.psess
+*.vsp
+*.vspscc
+*.vssscc
+
+# === Rider / JetBrains ===
+.idea/
+
+# === Secrets / config ===
+appsettings.json
+appsettings.Development.json
+secrets.json
+
+# === Build output ===
+publish/
+out/
+dist/
+
+# === EF Core ===
+migrations/
+
+# === npm / yarn / node ===
+node_modules/
+package-lock.json
+yarn.lock
+
+# === Logs ===
+*.log
+logs/
+log/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Others ===
+*.bak
+*.tmp
+*.cache
+*.vsdx
+*.sql
+*.mdf
+*.ldf
+
 
 # Others
 ~$*
