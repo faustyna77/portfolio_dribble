@@ -1,5 +1,4 @@
-﻿namespace PortfolioApp.Controllers
-{
+﻿
     using global::PortfolioApp.Data;
     using global::PortfolioApp.Models;
     using Microsoft.AspNetCore.Authorization;
@@ -8,7 +7,7 @@
 
     namespace PortfolioApp.Controllers
     {
-
+             
        
         public class PortfolioController : Controller
         {
@@ -18,17 +17,19 @@
             {
                 _context = context;
             }
-            [HttpGet("Portfolio/{slug}")]
-            public IActionResult DetailsBySlug(string slug)
-            {
-                var project = _context.Projects.FirstOrDefault(p => p.Slug == slug);
-                if (project == null)
-                    return NotFound();
+          
+        [HttpGet("projekty/{slug}")]
+        public IActionResult SlugDetails(string slug)
+        {
+            var project = _context.Projects.FirstOrDefault(p => p.Slug == slug);
+            if (project == null)
+                return NotFound();
 
-                return View("Details", project); // używa widoku Details.cshtml
-            }
+            return View("Details", project);
+        }
 
-            [Authorize]
+
+        [Authorize]
             [HttpGet]
             public IActionResult Create()
             {
@@ -64,4 +65,3 @@
         }
     }
 
-}

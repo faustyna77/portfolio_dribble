@@ -1,54 +1,98 @@
 ﻿@model List<PortfolioApp.Models.PortfolioProject>
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewData["Title"] = "Projekty";
 }
 
-<h1>Moje projekty</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Moje projekty</h1>
 
-@if (Model != null && Model.Count > 0)
-{
-    <ul>
-        @foreach (var project in Model)
-        {
-            <li>
-                <h3>
-                    <a asp-action="Details" asp-route-id="@project.Id">@project.Title</a>
-                </h3>
-               
-                <p><strong>@project.Category</strong> | Dodano: @project.CreatedAt.ToShortDateString()</p>
-                <p>@project.ShortDescription</p>
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var project in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        @* Obraz lub wideo *@
+                        @if (!string.IsNullOrEmpty(project.VideoEmbedCode))
+                        {
+                            if (project.VideoEmbedCode.Contains("youtube.com") || project.VideoEmbedCode.Contains("youtu.be"))
+                            {
+                                var youtubeId = "";
+                                if (project.VideoEmbedCode.Contains("watch?v="))
+                                {
+                                    youtubeId = project.VideoEmbedCode.Split("watch?v=")[1].Split('&')[0];
+                                }
+                                else if (project.VideoEmbedCode.Contains("youtu.be/"))
+                                {
+                                    youtubeId = project.VideoEmbedCode.Split("youtu.be/")[1].Split('?')[0];
+                                }
 
-                @if (!string.IsNullOrEmpty(project.VideoEmbedCode))
-                {
-                    @Html.Raw(project.VideoEmbedCode)
-                }
-                else if (!string.IsNullOrEmpty(project.ImageUrl))
-                {
-                   
-                   
+                                <img src="https://img.youtube.com/vi/@youtubeId/0.jpg" class="card-img-top" alt="Miniatura YouTube" />
+                            }
+                            else if (project.VideoEmbedCode.EndsWith(".mp4"))
+                            {
+                                <video class="card-img-top" controls>
+                                    <source src="@project.VideoEmbedCode" type="video/mp4">
+                                    Twoja przeglądarka nie obsługuje wideo.
+                                </video>
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(project.ImageUrl))
+                        {
+                            <img src="@project.ImageUrl" class="card-img-top" alt="Obraz projektu" />
+                        }
 
-            
-                   
-                    <a asp-controller="Portfolio" asp-action="DetailsBySlug" asp-route-slug="@project.Slug">
-                        <img src="@project.ImageUrl" alt="Obraz projektu" style="max-width: 300px;" />
-                    </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title</h5>
+                            <p class="card-text"><strong>Kategoria:</strong> @project.Category</p>
+                            <p class="card-text"><strong>Opis:</strong> @project.ShortDescription</p>
+                            <p class="card-text"><strong>Dodano:</strong> @project.CreatedAt.ToShortDateString()</p>
+                            <p class="card-text"><strong>Tagi:</strong> @project.Tags</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="@project.ProjectLink" target="_blank" class="btn btn-primary btn-sm">Zobacz projekt</a>
+                            <a asp-controller="Portfolio" asp-action="SlugDetails" asp-route-slug="@project.Slug" class="btn btn-secondary btn-sm">Szczegóły</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Brak projektów do wyświetlenia.</p>
+    }
 
+    <hr class="my-4" />
 
+    <form asp-action="Index" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="question" class="form-control" placeholder="Zadaj pytanie o projekt" />
+            <button type="submit" class="btn btn-outline-primary">Wyślij</button>
+        </div>
+    </form>
 
- 
-                }
+    @if (ViewBag.Answer != null)
+    {
+        <div class="alert alert-success">
+            <strong>Odpowiedź:</strong> @ViewBag.Answer
+        </div>
+    }
 
-                <p><strong>Tagi:</strong> @project.Tags</p>
-                <p>
-                    <a href="@project.ProjectLink" target="_blank">Zobacz projekt</a>
-                </p>
-                <hr />
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Brak projektów do wyświetlenia.</p>
-}
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-action="Refresh" method="post" class="mb-3">
+            <button type="submit" class="btn btn-warning">🔄 Odśwież dane</button>
+        </form>
+    }
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">
+            <strong>@TempData["Message"]</strong>
+        </div>
+    }
+</div>

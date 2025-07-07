@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient();
+
+
+
 
 builder.Services.AddControllersWithViews();
 
@@ -33,10 +38,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-app.MapControllerRoute(
-    name: "slugRoute",
-    pattern: "projekty/{slug}",
-    defaults: new { controller = "Portfolio", action = "Details" });
 
 
 
@@ -49,5 +50,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.Seed(context);
 }
+
+
 
 app.Run();

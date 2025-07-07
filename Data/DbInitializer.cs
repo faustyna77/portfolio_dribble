@@ -38,6 +38,7 @@ namespace PortfolioApp.Data
                     Category = "Blog",
                     Slug = "inny-projekt",
                     CreatedAt = DateTime.UtcNow
+
                 }
             };
 
