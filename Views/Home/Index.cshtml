@@ -1,29 +1,122 @@
 ﻿@model List<PortfolioApp.Models.PortfolioProject>
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewData["Title"] = "Projekty";
 }
 
-<h1>Moje projekty</h1>
+<!-- Font Awesome do ikon -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-@if (Model != null && Model.Count > 0)
-{
-    <ul>
-        @foreach (var project in Model)
-        {
-            <li>
-                <h3>@project.Title</h3>
-                <p>@project.Description</p>
-                <p>
-                    <a href="@project.ProjectLink" target="_blank">Zobacz projekt</a>
-                </p>
-                <img src="@project.ImageUrl" alt="Obraz projektu" style="max-width: 300px;" />
-                <hr />
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Brak projektów do wyświetlenia.</p>
-}
+<div class="container mt-4">
+    <form asp-action="Index" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="question" class="form-control" placeholder="Zapytaj FASTina AI o projekt" />
+            <button type="submit" class="btn btn-outline-primary">Wyślij</button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var project in Model)
+            {
+                var categoryIcon = project.Category switch
+                {
+                    "Web" => "fa-globe",
+                    "Mobile" => "fa-mobile-screen-button",
+                    "AI" => "fa-robot",
+                    "DevOps" => "fa-server",
+                    "Design" => "fa-paintbrush",
+                    _ => "fa-folder"
+                };
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">
+                        @if (!string.IsNullOrEmpty(project.VideoEmbedCode))
+                        {
+                            if (project.VideoEmbedCode.Contains("youtube.com") || project.VideoEmbedCode.Contains("youtu.be"))
+                            {
+                                var youtubeId = "";
+                                if (project.VideoEmbedCode.Contains("watch?v="))
+                                {
+                                    youtubeId = project.VideoEmbedCode.Split("watch?v=")[1].Split('&')[0];
+                                }
+                                else if (project.VideoEmbedCode.Contains("youtu.be/"))
+                                {
+                                    youtubeId = project.VideoEmbedCode.Split("youtu.be/")[1].Split('?')[0];
+                                }
+
+                                <img src="https://img.youtube.com/vi/@youtubeId/0.jpg" class="card-img-top" alt="Miniatura YouTube" />
+                            }
+                            else if (project.VideoEmbedCode.EndsWith(".mp4"))
+                            {
+                                <video class="card-img-top" controls>
+                                    <source src="@project.VideoEmbedCode" type="video/mp4">
+                                    Twoja przeglądarka nie obsługuje wideo.
+                                </video>
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(project.ImageUrl))
+                        {
+                            <img src="@project.ImageUrl" class="card-img-top" alt="Obraz projektu" />
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">@project.Title</h5>
+                            <p class="card-text">
+                                <i class="fa-solid @categoryIcon text-secondary me-2"></i>
+                                <strong>@project.Category</strong>
+                            </p>
+                            <p class="card-text">@project.ShortDescription</p>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Dodano:</strong> @project.CreatedAt.ToShortDateString()</li>
+                            <li class="list-group-item"><strong>Tagi:</strong> @project.Tags</li>
+                        </ul>
+
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-3">
+                            <div>
+                                <a href="@project.ProjectLink" target="_blank" class="btn btn-primary btn-sm">🔗 Zobacz</a>
+                                <a asp-controller="Portfolio" asp-action="SlugDetails" asp-route-slug="@project.Slug" class="btn btn-outline-secondary btn-sm">Szczegóły</a>
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fa-solid fa-eye me-1"></i> @project.ViewCount
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Brak projektów do wyświetlenia.</p>
+    }
+
+    <hr class="my-4" />
+
+    
+
+    @if (ViewBag.Answer != null)
+    {
+        <div class="alert alert-success">
+            <strong>Odpowiedź:</strong> @ViewBag.Answer
+        </div>
+    }
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-action="Refresh" method="post" class="mb-3">
+            <button type="submit" class="btn btn-warning">🔄 Odśwież dane</button>
+        </form>
+    }
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">
+            <strong>@TempData["Message"]</strong>
+        </div>
+    }
+</div>

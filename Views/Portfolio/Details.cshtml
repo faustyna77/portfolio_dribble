@@ -1,0 +1,52 @@
+﻿namespace PortfolioApp.Views.Portfolio
+{
+
+
+@model PortfolioApp.Models.PortfolioProject
+
+<h1>@Model.Title</h1>
+<p><strong>@Model.Category</strong> | @Model.CreatedAt.ToShortDateString()</p>
+<p>@Model.ShortDescription</p>
+
+@if (!string.IsNullOrEmpty(Model.VideoEmbedCode))
+{
+    var videoUrl = Model.VideoEmbedCode;
+    string videoId = "";
+
+    if (videoUrl.Contains("watch?v="))
+    {
+        videoId = videoUrl.Split("watch?v=")[1].Split('&')[0];
+    }
+    else if (videoUrl.Contains("youtu.be/"))
+    {
+        videoId = videoUrl.Split("youtu.be/")[1].Split('?')[0];
+    }
+
+    if (!string.IsNullOrEmpty(videoId))
+    {
+        <div class="video-container" style="margin-bottom: 20px;">
+            <iframe width="560" height="315"
+                    src="https://www.youtube.com/embed/@videoId"
+                    frameborder="0"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    }
+    else
+    {
+        <p><a href="@videoUrl" target="_blank">@videoUrl</a></p>
+    }
+}
+else if (!string.IsNullOrEmpty(Model.ImageUrl))
+{
+    <img src="@Model.ImageUrl" alt="Obrazek" style="max-width: 500px;" />
+}
+
+<div class="mt-3">
+    @Html.Raw(Model.Content)
+</div>
+
+<p><strong>Tagi:</strong> @Model.Tags</p>
+
+
+}
