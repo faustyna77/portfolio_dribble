@@ -7,6 +7,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient();
 
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80"; // Render ustawia PORT automatycznie
+builder.WebHost.UseUrls($"http://*:{port}");
 
 
 builder.Services.AddControllersWithViews();
