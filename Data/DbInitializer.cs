@@ -1,16 +1,21 @@
 ﻿using PortfolioApp.Models;
 using System;
 
-namespace PortfolioApp.Data
-{
-    public static class DbInitializer
-    {
-        public static void Seed(PortfolioDbContext context)
-        {
-            if (context.Projects.Any()) return;
 
-            var projects = new PortfolioProject[]
+
+namespace PortfolioApp.Data
+    {
+        public static class DbInitializer
+        {
+            public static void Seed(PortfolioDbContext context, string adminEmail, string adminPassword)
             {
+                if (context.Projects.Any()) return;
+
+                // Dodaj tutaj inicjalizację admina – jeśli masz User model
+                Console.WriteLine($"Admin email: {adminEmail}, hasło: {adminPassword}");
+
+                var projects = new PortfolioProject[]
+                {
                 new PortfolioProject
                 {
                     Title = "Moje portfolio",
@@ -38,12 +43,14 @@ namespace PortfolioApp.Data
                     Category = "Blog",
                     Slug = "inny-projekt",
                     CreatedAt = DateTime.UtcNow
-
                 }
-            };
+                };
 
-            context.Projects.AddRange(projects);
-            context.SaveChanges();
+                context.Projects.AddRange(projects);
+                context.SaveChanges();
+            }
         }
     }
-}
+
+
+

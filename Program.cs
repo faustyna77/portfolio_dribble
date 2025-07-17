@@ -7,6 +7,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient();
 
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80"; // Render ustawia PORT automatycznie
+builder.WebHost.UseUrls($"http://*:{port}");
 
 
 builder.Services.AddControllersWithViews();
@@ -46,9 +48,16 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<PortfolioDbContext>();
+    var adminEmail = builder.Configuration["AdminUser:Email"];
+    var adminPassword = builder.Configuration["AdminUser:Password"];
 
-    context.Database.EnsureCreated();
-    DbInitializer.Seed(context);
+   
+        context.Database.EnsureCreated();
+        DbInitializer.Seed(context, adminEmail, adminPassword);
+    
+
+
+ 
 }
 
 
