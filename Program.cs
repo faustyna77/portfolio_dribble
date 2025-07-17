@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// PORT z Render.com
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.UseUrls($"http://*:{port}");
-
-// Dodawanie usług
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient();
+
+
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PortfolioDbContext>(options =>
@@ -21,10 +20,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
     });
 
-// 🧱 Budowanie aplikacji (tylko raz!)
 var app = builder.Build();
 
-// Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -33,17 +30,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-app.UseAuthentication();
+app.UseAuthentication(); // Dodaj to, jeśli masz logowanie
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Inicjalizacja bazy danych
+
+
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -51,11 +49,15 @@ using (var scope = app.Services.CreateScope())
     var adminEmail = builder.Configuration["AdminUser:Email"];
     var adminPassword = builder.Configuration["AdminUser:Password"];
 
+   
+        context.Database.EnsureCreated();
+        DbInitializer.Seed(context, adminEmail, adminPassword);
+    
 
 
-    context.Database.EnsureCreated();
-    DbInitializer.Seed(context, adminEmail, adminPassword);
-
+ 
 }
+
+
 
 app.Run();
