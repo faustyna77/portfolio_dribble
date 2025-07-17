@@ -48,10 +48,14 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<PortfolioDbContext>();
+    var adminEmail = builder.Configuration["AdminUser:Email"];
+    var adminPassword = builder.Configuration["AdminUser:Password"];
+
 
 
     context.Database.EnsureCreated();
-    DbInitializer.Seed(context);
+    DbInitializer.Seed(context, adminEmail, adminPassword);
+
 }
 
 app.Run();
