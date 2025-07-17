@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+var app = builder.Build();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient();
 
@@ -31,7 +35,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication(); // Dodaj to, jeúli masz logowanie
+app.UseAuthentication(); // Dodaj to, je≈ìli masz logowanie
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
