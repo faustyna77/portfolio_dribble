@@ -1,18 +1,20 @@
-# Użyj oficjalnego obrazu .NET SDK do budowania
+# Etap 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Skopiuj pliki i przywróć zależności
 COPY . ./
-RUN dotnet restore
 
-# Opublikuj aplikację
-RUN dotnet publish -c Release -o out
+# Przywrócenie zależności
+RUN dotnet restore portfolioApp.csproj
 
-# Użyj obrazu runtime
+# Publikacja aplikacji
+RUN dotnet publish portfolioApp.csproj -c Release -o /app/out
+
+# Etap 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
+
 COPY --from=build /app/out .
 
-# Uruchom aplikację
-ENTRYPOINT ["dotnet", "PortfolioApp.dll"]
+# Punkt wejścia aplikacji
+ENTRYPOINT ["dotnet", "portfolioApp.dll"]
