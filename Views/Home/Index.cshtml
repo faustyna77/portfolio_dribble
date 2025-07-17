@@ -5,17 +5,34 @@
     ViewData["Title"] = "Projekty";
 }
 
+<!-- Font Awesome do ikon -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
 <div class="container mt-4">
-    <h1 class="mb-4">Moje projekty</h1>
+    <form asp-action="Index" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="question" class="form-control" placeholder="Zapytaj FASTina AI o projekt" />
+            <button type="submit" class="btn btn-outline-primary">Wyślij</button>
+        </div>
+    </form>
 
     @if (Model != null && Model.Count > 0)
     {
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @foreach (var project in Model)
             {
+                var categoryIcon = project.Category switch
+                {
+                    "Web" => "fa-globe",
+                    "Mobile" => "fa-mobile-screen-button",
+                    "AI" => "fa-robot",
+                    "DevOps" => "fa-server",
+                    "Design" => "fa-paintbrush",
+                    _ => "fa-folder"
+                };
+
                 <div class="col">
-                    <div class="card h-100">
-                        @* Obraz lub wideo *@
+                    <div class="card h-100 shadow-sm border-0">
                         @if (!string.IsNullOrEmpty(project.VideoEmbedCode))
                         {
                             if (project.VideoEmbedCode.Contains("youtube.com") || project.VideoEmbedCode.Contains("youtu.be"))
@@ -47,14 +64,26 @@
 
                         <div class="card-body">
                             <h5 class="card-title">@project.Title</h5>
-                            <p class="card-text"><strong>Kategoria:</strong> @project.Category</p>
-                            <p class="card-text"><strong>Opis:</strong> @project.ShortDescription</p>
-                            <p class="card-text"><strong>Dodano:</strong> @project.CreatedAt.ToShortDateString()</p>
-                            <p class="card-text"><strong>Tagi:</strong> @project.Tags</p>
+                            <p class="card-text">
+                                <i class="fa-solid @categoryIcon text-secondary me-2"></i>
+                                <strong>@project.Category</strong>
+                            </p>
+                            <p class="card-text">@project.ShortDescription</p>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <a href="@project.ProjectLink" target="_blank" class="btn btn-primary btn-sm">Zobacz projekt</a>
-                            <a asp-controller="Portfolio" asp-action="SlugDetails" asp-route-slug="@project.Slug" class="btn btn-secondary btn-sm">Szczegóły</a>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Dodano:</strong> @project.CreatedAt.ToShortDateString()</li>
+                            <li class="list-group-item"><strong>Tagi:</strong> @project.Tags</li>
+                        </ul>
+
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center p-3">
+                            <div>
+                                <a href="@project.ProjectLink" target="_blank" class="btn btn-primary btn-sm">🔗 Zobacz</a>
+                                <a asp-controller="Portfolio" asp-action="SlugDetails" asp-route-slug="@project.Slug" class="btn btn-outline-secondary btn-sm">Szczegóły</a>
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fa-solid fa-eye me-1"></i> @project.ViewCount
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -68,12 +97,7 @@
 
     <hr class="my-4" />
 
-    <form asp-action="Index" method="get" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="question" class="form-control" placeholder="Zadaj pytanie o projekt" />
-            <button type="submit" class="btn btn-outline-primary">Wyślij</button>
-        </div>
-    </form>
+    
 
     @if (ViewBag.Answer != null)
     {

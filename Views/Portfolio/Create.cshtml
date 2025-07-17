@@ -4,60 +4,74 @@
     ViewData["Title"] = "Dodaj nowy projekt";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Dodaj nowy projekt</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow rounded">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="bi bi-plus-circle"></i> Dodaj nowy projekt</h3>
+                </div>
 
-    <form asp-action="Create" method="post">
-        <div class="mb-3">
-            <label asp-for="Title" class="form-label">Tytuł:</label>
-            <input asp-for="Title" class="form-control" />
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">📝 Tytuł</label>
+                            <input asp-for="Title" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ShortDescription" class="form-label">✏️ Krótki opis</label>
+                            <input asp-for="ShortDescription" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">🧾 Pełny opis (HTML/Markdown)</label>
+                            <textarea asp-for="Content" rows="4" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">🗒️ Opis ogólny</label>
+                            <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Category" class="form-label">📂 Kategoria</label>
+                            <input asp-for="Category" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Tags" class="form-label">🏷️ Tagi (np. C#, Vue)</label>
+                            <input asp-for="Tags" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label">🔗 Slug (np. moj-super-projekt)</label>
+                            <input asp-for="Slug" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ImageUrl" class="form-label">🖼️ Adres URL obrazka</label>
+                            <input asp-for="ImageUrl" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="VideoEmbedCode" class="form-label">🎥 Link do wideo (YouTube lub .mp4)</label>
+                            <input asp-for="VideoEmbedCode" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProjectLink" class="form-label">🔗 Link do projektu (GitHub/demo)</label>
+                            <input asp-for="ProjectLink" class="form-control" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                💾 Zapisz projekt
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label asp-for="ShortDescription" class="form-label">Krótki opis:</label>
-            <input asp-for="ShortDescription" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Content" class="form-label">Pełny opis (HTML lub markdown):</label>
-            <textarea asp-for="Content" rows="5" class="form-control"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label">Opis (zwykły):</label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Category" class="form-label">Kategoria:</label>
-            <input asp-for="Category" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Tags" class="form-label">Tagi (np. C#, Vue, design):</label>
-            <input asp-for="Tags" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Slug" class="form-label">Slug (np. moj-super-projekt):</label>
-            <input asp-for="Slug" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="ImageUrl" class="form-label">Adres URL obrazka:</label>
-            <input asp-for="ImageUrl" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="VideoEmbedCode" class="form-label">Wideo (link do YouTube lub .mp4):</label>
-            <input asp-for="VideoEmbedCode" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="ProjectLink" class="form-label">Link do projektu (GitHub, demo):</label>
-            <input asp-for="ProjectLink" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-success">💾 Dodaj projekt</button>
-    </form>
+    </div>
 </div>

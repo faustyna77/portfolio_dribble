@@ -29,5 +29,8 @@ namespace PortfolioApp.Models
         public string? Slug { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int ViewCount { get; set; } = 0;
+
+
     }
 }
