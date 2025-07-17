@@ -3,16 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// PORT z Render.com
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://*:{port}");
 
-var app = builder.Build();
+// Dodawanie usług
 builder.Services.AddHttpClient();
-builder.Services.AddHttpClient();
-
-
-
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PortfolioDbContext>(options =>
@@ -24,8 +21,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
     });
 
+// 🧱 Budowanie aplikacji (tylko raz!)
 var app = builder.Build();
 
+// Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -34,18 +33,17 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
-app.UseAuthentication(); // Dodaj to, jeœli masz logowanie
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-
-
-
-
+// Inicjalizacja bazy danych
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -54,7 +52,5 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.Seed(context);
 }
-
-
 
 app.Run();
