@@ -23,7 +23,7 @@ namespace PortfolioApp.Controllers
         {
             var httpClient = _httpClientFactory.CreateClient();
 
-            var response = await httpClient.GetAsync("http://localhost:8000/refresh");
+            var response = await httpClient.GetAsync("https://rag-hscm.onrender.com/refresh");
 
             if (response.IsSuccessStatusCode)
             {
@@ -46,7 +46,7 @@ namespace PortfolioApp.Controllers
                 var query = new QueryModel { Question = question };
 
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("http://localhost:8000/ask", query);
+                var response = await httpClient.PostAsJsonAsync("https://rag-hscm.onrender.com/ask", query);
 
                 if (response.IsSuccessStatusCode)
                 {
